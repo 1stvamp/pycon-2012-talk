@@ -8,6 +8,10 @@ h1, h2, h3, h4, h5, h6 {
     color: #000 !important;
 }
 
+li {
+    list-style-position: inside;
+}
+
 li, span {
     background-color: #fff;
     opacity: 0.7;
@@ -33,5 +37,15 @@ section {
 }
 #slide5 {
     background-image: url('../images/westalkbraveworld.png');
+    background-position: top left;
+}
+#slide6 {
+    background-image: url('../images/westalkcomeback1.png');
+}
+#slide7 {
+    background-image: url('../images/westalkcomeback2.png');
+}
+#slide8 {
+    background-image: url('../images/westalkhadmehooked.png');
     background-position: top left;
 }
