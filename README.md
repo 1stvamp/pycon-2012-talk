@@ -5,6 +5,10 @@ These are the HTML5 powered (thanks [reveal.js](https://github.com/hakimel/revea
 
 Usage
 ---
+You can view a pre-built version on Github pages here: http://1stvamp.github.com/pycon-2012-talk/
+
+Or..
+
 ```bash
 git clone git@github.com:1stvamp/pycon-2012-talk.git
 cd pycon-2012-talk
