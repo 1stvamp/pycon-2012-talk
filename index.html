@@ -157,8 +157,9 @@
 						# setup collection etc. etc.
 						
 						hooks = webhook_collection.find({"account_id": id}) 
-						for hook in hooks:
-						    requests.post(hook["url"], data) 
+						if data and len(data) > 0:
+						    for hook in hooks:
+						        requests.post(hook["url"], data) 
 
 					- 	 **N.B.** `skyhooks` does this for you
 				</section>
