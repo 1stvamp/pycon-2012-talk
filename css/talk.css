@@ -12,9 +12,9 @@ li {
     list-style-position: inside;
 }
 
-li, span {
+li, span, pre {
     background-color: #fff;
-    opacity: 0.7;
+    opacity: 0.75;
     font-size: 80%;
 }
 
@@ -23,16 +23,17 @@ section {
     background-position: left center;
 }
 
+.reveal a {
+    color: #767676 !important;
+}
+
 #slide1 {
     background-image: url('../images/westalkasyncplumb.png');
 }
 #slide2 {
     background-image: url('../images/westalkwho.png');
 }
-#slide3 {
-    background-image: url('../images/westalkwebapi.png');
-}
-#slide4 {
+#slide3, #slide4 {
     background-image: url('../images/westalkwebapi.png');
 }
 #slide5 {
@@ -48,4 +49,35 @@ section {
 #slide8 {
     background-image: url('../images/westalkhadmehooked.png');
     background-position: top left;
+}
+#slide9 {
+    background-image: url('../images/westalkwebhookregister.png');
+    background-position: top left;
+}
+#slide10 {
+    background-image: url('../images/westalkdayofcelery.png');
+    background-position: top left;
+}
+#slide11 {
+    background-image: url('../images/westalkpubandsub.png');
+}
+#slide12 {
+    background-image: url('../images/westalkmanytomany.png');
+    background-position: top left;
+}
+#slide13 {
+    background-image: url('../images/westalkkinda.png');
+}
+#slide14 {
+    background-image: url('../images/westalkhaxx.png');
+}
+#slide15 {
+    background-image: url('../images/westalkskyhooktornado.png');
+    background-position: top left;
+}
+#slide16, #slide17 {
+    background-image: url('../images/westalktornadoranch.png');
+}
+#slide18 {
+    background-image: url('../images/westalkthingsnote.png');
 }

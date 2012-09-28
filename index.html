@@ -21,7 +21,6 @@
 		<link rel="stylesheet" href="../css/talk.css">
 
 		<!-- For syntax highlighting -->
-		<link rel="stylesheet" href="lib/css/zenburn.css">
 
 		<script>
 			// If the query includes 'print-pdf' we'll use the PDF print sheet
@@ -92,14 +91,91 @@
 				-	 Task completed and returns data...
 				-	 ...how? 
 			    </section>
+			    <section data-markdown id="slide10">
+				## Segway to Celery
+				- 	 **Great**: Takes care of distributing tasks to clusters
+				- 	 **Not so great**: can't do multiple pubsub
+			    </section>
+			    <section data-markdown id="slide11">
+				## Publish and subscribe
+				-	 Need results back from Celery by account ID
+				-	 Pubsub is ideal for this
+				- 	 Each account has multiple users
+				- 	 **What we want**: one task per account, same result to each user
+			    </section>
+			    <section>
+				<section data-markdown id="slide12">
+					## Many to many with pubsub 
+					- 	 Redis let's you do this (but we don't know Redis)
+					-	 In theory AMQP let's you do M2M pubsub (and Celery does AMQP by default)
+				</section>
+				<section data-markdown id="slide13">
+					## ...well, kind of
+
+						>>> result = task.delay(foo) 
+						AsyncResult(id="some-unique-id") 
+						
+						>>> result.get()
+						...
+				</section>
+			    </section>
+			    <section data-markdown id="slide14">
+				## Cue the haxx, lots of 'em
+				- 	 Threads (urgh)
+				- 	 Polling MongoDB (we **do** know Mongo)
+				- 	 Using MongoDB as Celery backend and keeping results (hello race conditions!)
+			    </section>
 			    <section data-markdown id="slide8">
-				## You Have Me Hooked
+				## You Had Me Hooked
 				-	 The stack's just web APIs..  
-				..why not webhooks to return data?
-				-	 They're async, just like handling the frontend
+				..why not just use webhooks to return data?
+				-	 They're async, just like handling our frontend requests
 				-	 They can be tested the same way as your other APIs 
 			    </section>
-			    <section data-markdown id="slide">
+			    <section data-markdown id="slide9">
+				## The Webhook Registry
+				-	 Register/unregister callbacks by a given key (e.g. an account ID)
+				-	 Web handler accepts data payloads via HTTP POST
+				- 	 Webhook URI persisted somewhere (e.g. MongoDB)
+			    </section>
+			    <section data-markdown id="slide15">
+				## Skyhoooks to reach the Tornado
+				- 	 Open source library with registry for Tornado, Gevent and soon Twisted.
+				- 	 Registers callbacks and handling of multiple instance URIs
+				- 	 Available now: [github.com/serverdensity/skyhooks](https://github.com/serverdensity/skyhooks)
+			    </section>
+			    <section>
+				<section data-markdown id="slide16">
+					## Meanwhile,  back on the [server] farm
+					- 	 Tasks running somewhere, somehow
+					- 	 Data returning from one or more tasks
+					- 	 One or more `INSERT_SERVER_HERE` (e.g. Tornado) instances at one or more URIs awaiting data
+				</section>
+				<section data-markdown id="slide17">
+					## 
+						# import requests, import pymongo
+						# setup collection etc. etc.
+						
+						hooks = webhook_collection.find({"account_id": id}) 
+						for hook in hooks:
+						    requests.post(hook["url"], data) 
+
+					- 	 **N.B.** `skyhooks` does this for you
+				</section>
+			    </section>
+			    <section data-markdown id="slide18">
+				## Is this the only way? 
+				- 	 ZeroMQ?
+				- 	 Crossroads.io has bi-di-pubsub
+				- 	 MongoDB trailing cursors
+				- 	 Do you need it?
+			    </section>
+			    <section data-markdown>
+				## sys.exit(0)
+				- 	 Code: [github.com/serverdensity](https://github.com/serverdensity)
+				- 	 Slides: [github.com/1stvamp/pycon-2012-talk](https://github.com/1stvamp/pycon-2012-talk)
+				- 	 Jonathan "Joff" Oliver: [about.me/joffie](http://about.me/joffie)
+				- 	 Grab me and say hi `:-)`
 			    </section>
 			</div>
 
@@ -127,15 +203,16 @@
 				controls: true,
 				progress: true,
 				history: true,
+				overview: true,
+				rollingLinks: false,
 				
 				theme: Reveal.getQueryHash().theme || 'default', // available themes are in /css/theme
 				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/linear(2d)
 
 				// Optional libraries used to extend on reveal.js
 				dependencies: [
-					{ src: 'lib/js/highlight.js', async: true, callback: function() { window.hljs.initHighlightingOnLoad(); } },
 					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
-					{ src: 'lib/js/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: '../lib/js/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
 					{ src: 'lib/js/data-markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
 					{ src: '/socket.io/socket.io.js', async: true, condition: function() { return window.location.host === 'localhost:1947'; } },
 					{ src: 'plugin/speakernotes/client.js', async: true, condition: function() { return window.location.host === 'localhost:1947'; } },
